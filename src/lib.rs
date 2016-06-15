@@ -166,7 +166,8 @@ pub extern fn kdri_connection_close(connection: *mut KdriConnection) -> i32 {
 }
 
 #[no_mangle]
-pub extern fn kdri_destroy_handle(_: *mut KdriHandle) {
+pub extern fn kdri_destroy_handle(_: *mut KdriHandle) -> i32 {
+    0
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,7 +210,7 @@ macro_rules! kdri_get {
         #[no_mangle]
         pub extern fn $e(connection: *mut KdriConnection, v: *mut $t) -> KdriReturn {
             match unsafe{&mut *connection}.connection.$f() {
-                Some(x) => { unsafe{*v = x}; KdriReturn::Ok },
+                Some(x) => { unsafe{*v = x as $t;}; KdriReturn::Ok },
                 None => { KdriReturn::NotInitialized }
             }
         }
@@ -253,7 +254,7 @@ kdri_get!(kdri_get_incline_max, get_incline_max, u16);
 kdri_get!(kdri_get_brake_level, get_brake_level, u8);
 kdri_get!(kdri_get_brake_level_min, get_brake_level_min, u8);
 kdri_get!(kdri_get_brake_level_max, get_brake_level_max, u8);
-kdri_get!(kdri_get_online, get_online, bool);
+kdri_get!(kdri_get_online, get_online, u8);
 kdri_get!(kdri_get_pulse, get_pulse, u16);
 kdri_get!(kdri_get_rpm, get_rpm, u16);
 kdri_get!(kdri_get_distance, get_distance, u16);
