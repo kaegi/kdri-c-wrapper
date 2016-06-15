@@ -1,0 +1,13 @@
+[package]
+name = "kdri-c-wrapper"
+version = "0.1.0"
+authors = ["Chang Spivey <chang.spivey@gmail.com>"]
+
+[dependencies]
+kdri = { git = "https://github.com/ChangSpivey/kdri" }
+enum_primitive = "0.1.0"
+
+
+[lib]
+name = "kdri"
+crate-type = [ "dylib", "staticlib" ]
