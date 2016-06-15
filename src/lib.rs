@@ -124,18 +124,21 @@ pub extern fn kdri_create_handle() -> *mut KdriHandle {
 }
 
 #[no_mangle]
-pub extern fn kdri_scan_devices(_: *mut KdriHandle, dst_device_array: *mut KdriDevice, max_array_length: u32, timeout: u32) -> i32 {
+pub extern fn kdri_scan_devices(_: *mut KdriHandle, dst_device_array: *mut KdriDevice, max_array_length: u32) -> i32 {
     match panic::catch_unwind(|| {
-        if let Some(devices) = kdri::scan_devices(timeout) {
-            let num_devices = std::cmp::min(max_array_length, devices.len() as u32);
-            let device_slice = unsafe { std::slice::from_raw_parts_mut(dst_device_array, max_array_length as usize) };
-            for i in 0..num_devices as usize {
-                device_slice[i] = KdriDevice::from_kettler_device(&devices[i]);
+        match kdri::scan_devices() {
+            Ok(devices) => {
+                let num_devices = std::cmp::min(max_array_length, devices.len() as u32);
+                let device_slice = unsafe { std::slice::from_raw_parts_mut(dst_device_array, max_array_length as usize) };
+                for i in 0..num_devices as usize {
+                    device_slice[i] = KdriDevice::from_kettler_device(&devices[i]);
+                }
+                return num_devices as i32;
             }
-            return num_devices as i32;
-
-        } else {
-            return -1;
+            Err(error) => {
+                println!("{}", error);
+                return -1;
+            }
         }
     }) {
         Ok(i) => return i,

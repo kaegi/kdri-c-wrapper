@@ -51,7 +51,7 @@ typedef enum {
 
 
 extern KdriHandle* kdri_create_handle(void);
-extern int32_t kdri_scan_devices(KdriHandle* handle, KdriDevice* dst_device_array, uint32_t max_array_length, uint32_t timeout);
+extern int32_t kdri_scan_devices(KdriHandle* handle, KdriDevice* dst_device_array, uint32_t max_array_length);
 extern KdriConnection* kdri_connect(KdriHandle* handle, KdriDevice* device);
 extern int32_t kdri_connection_close(KdriConnection* connection);
 extern int32_t kdri_destroy_handle(KdriHandle* handle);

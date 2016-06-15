@@ -32,7 +32,7 @@ int main(int argc, char const *argv[]) {
   KdriDevice devices[256] = { 0 };
 
   // scan for devices in range
-  int32_t result = kdri_scan_devices(handle, devices, 256, 1);
+  int32_t result = kdri_scan_devices(handle, devices, 256);
   if(result < 0) { printf("Error code %d\n", result); exit(1); }
   else if(result == 0) { printf("No devices in range", result); exit(1); }
 
