@@ -12,7 +12,7 @@ fn carray_from_string(name: String, dst_array: *mut c_uchar, max_length: usize) 
     let cname = unsafe{std::slice::from_raw_parts_mut(dst_array, max_length)};
 
     let new_length = min(name.len(), max_length - 1);
-    for i in 0..new_length - 1 {
+    for i in 0..new_length {
         cname[i] = name.as_bytes()[i];
     }
     cname[new_length] = 0;
