@@ -56,6 +56,12 @@ extern KdriConnection* kdri_connect(KdriHandle* handle, KdriDevice* device);
 extern int32_t kdri_connection_close(KdriConnection* connection);
 extern int32_t kdri_destroy_handle(KdriHandle* handle);
 
+/*
+	17 bytes will be written to "name" in the form of "XX:XX:XX:XX:XX:XX". The string will NOT be null
+	terminated.
+*/
+extern int32_t kdri_device_addr_to_string(KdriHandle* handle, KdriDevice* device, uint8_t* name);
+
 extern KdriReturn kdri_set_speed(KdriConnection* connection, uint16_t v);
 extern KdriReturn kdri_set_power(KdriConnection* connection, uint16_t v);
 extern KdriReturn kdri_set_incline(KdriConnection* connection, uint16_t v);

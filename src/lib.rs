@@ -156,6 +156,14 @@ pub extern fn kdri_connect(handle: *mut KdriHandle, device: *const KdriDevice) -
 }
 
 #[no_mangle]
+pub extern fn kdri_device_addr_to_string(_: *mut KdriHandle, device: *const KdriDevice, name: *mut c_char) {
+    let name_string: String = unsafe{&*device}.to_kettler_device().get_addr().to_string();
+    assert!(name_string.len() >= 17);
+    let name_slice = unsafe { std::slice::from_raw_parts_mut(name as *mut u8, 17) };
+    for i in 0..17 { name_slice[i] = name_string.as_bytes()[i]; }
+}
+
+#[no_mangle]
 pub extern fn kdri_connection_close(connection: *mut KdriConnection) -> i32 {
     let mut kdri_connection_box: Box<KdriConnection> = unsafe { std::mem::transmute(connection) };
     let kdri_connection: &mut KdriConnection = kdri_connection_box.borrow_mut();
