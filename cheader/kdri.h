@@ -1,16 +1,23 @@
 
-#ifndef cheddar_generated_rusty_h
-#define cheddar_generated_rusty_h
+#ifndef KDRI_H
+#define KDRI_H
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 
 
+typedef void KdriHandle;
+typedef void KdriConnection;
+typedef struct {
+	uint8_t name[256];
+	uint8_t btaddr[6];
+} KdriDevice;
 
 typedef enum KdriReturn {
 	Ok = 0,
@@ -24,7 +31,7 @@ typedef enum {
 	Racer = 3,
 	Rowing = 4,
 	Treadmill = 5,
-} KettlerDeviceType;
+} KdriDeviceType;
 
 typedef enum {
 	Up = 0,
@@ -34,7 +41,7 @@ typedef enum {
 typedef enum {
 	ConstantPower = 0,
 	ConstantBrake = 1,
-} KettlerBrakeMode;
+} KdriBrakeMode;
 
 typedef enum {
 	Below = 0,
@@ -45,7 +52,7 @@ typedef enum {
 
 extern KdriHandle* kdri_create_handle(void);
 extern int32_t kdri_scan_devices(KdriHandle* handle, KdriDevice* dst_device_array, uint32_t max_array_length, uint32_t timeout);
-extern KdriConnection* kdri_connect(KdriHandle* handle, KdriDevice const* device);
+extern KdriConnection* kdri_connect(KdriHandle* handle, KdriDevice* device);
 extern int32_t kdri_connection_close(KdriConnection* connection);
 extern int32_t kdri_destroy_handle(KdriHandle* handle);
 
@@ -76,8 +83,8 @@ extern KdriReturn kdri_get_distance(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_energy(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_time(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_time_mode(KdriConnection* connection, uint16_t* v);
-extern KdriReturn kdri_get_device_name(KdriConnection* connection, uint8_t* array, usize_t max_size);
-extern KdriReturn kdri_get_device_id(KdriConnection* connection, uint8_t* array, usize_t max_size);
+extern KdriReturn kdri_get_device_name(KdriConnection* connection, uint8_t* array, size_t max_size);
+extern KdriReturn kdri_get_device_id(KdriConnection* connection, uint8_t* array, size_t max_size);
 extern KdriReturn kdri_get_power_range(KdriConnection* connection, KdriPowerRange* v);
 extern KdriReturn kdri_get_device_type(KdriConnection* connection, KdriDeviceType* v);
 extern KdriReturn kdri_get_device_state(KdriConnection* connection, KdriDeviceState* v);
