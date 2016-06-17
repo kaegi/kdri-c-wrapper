@@ -20,33 +20,33 @@ typedef struct {
 } KdriDevice;
 
 typedef enum KdriReturn {
-	Ok = 0,
-	Failed = 1,
-	NotInitialized = 2,
+	KdriOk = 0,
+	KdriFailed = 1,
+	KdriNotInitialized = 2,
 } KdriReturn;
 
 typedef enum {
-	Bike = 1,
-	Crosstrainer = 2,
-	Racer = 3,
-	Rowing = 4,
-	Treadmill = 5,
+	KdriDtBike = 1,
+	KdriDtCrosstrainer = 2,
+	KdriDtRacer = 3,
+	KdriDtRowing = 4,
+	KdriDtTreadmill = 5,
 } KdriDeviceType;
 
 typedef enum {
-	Up = 0,
-	Down = 1,
+	KdriDsUp = 0,
+	KdriDsDown = 1,
 } KdriDeviceState;
 
 typedef enum {
-	ConstantPower = 0,
-	ConstantBrake = 1,
+	KdriBmConstantPower = 0,
+	KdriBmConstantBrake = 1,
 } KdriBrakeMode;
 
 typedef enum {
-	Below = 0,
-	In = 1,
-	Above = 2,
+	KdriPrBelow = 0,
+	KdriPrIn = 1,
+	KdriPrAbove = 2,
 } KdriPowerRange;
 
 
@@ -70,12 +70,15 @@ extern KdriReturn kdri_set_update_interval(KdriConnection* connection, uint32_t 
 extern KdriReturn kdri_set_brake_mode(KdriConnection* connection, KdriBrakeMode v);
 extern KdriReturn kdri_set_online(KdriConnection* connection, uint8_t v);
 
+extern KdriReturn kdri_get_power_target(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_power(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_power_min(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_power_max(KdriConnection* connection, uint16_t* v);
+extern KdriReturn kdri_get_speed_target(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_speed(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_speed_min(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_speed_max(KdriConnection* connection, uint16_t* v);
+extern KdriReturn kdri_get_incline_target(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_incline(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_incline_min(KdriConnection* connection, uint16_t* v);
 extern KdriReturn kdri_get_incline_max(KdriConnection* connection, uint16_t* v);

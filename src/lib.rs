@@ -253,12 +253,15 @@ macro_rules! kdri_get_enum {
     }
 }
 
+kdri_get!(kdri_get_power_target, get_power_target, u16);
 kdri_get!(kdri_get_power, get_power, u16);
 kdri_get!(kdri_get_power_min, get_power_min, u16);
 kdri_get!(kdri_get_power_max, get_power_max, u16);
+kdri_get!(kdri_get_speed_target, get_speed_target, u16);
 kdri_get!(kdri_get_speed, get_speed, u16);
 kdri_get!(kdri_get_speed_min, get_speed_min, u16);
 kdri_get!(kdri_get_speed_max, get_speed_max, u16);
+kdri_get!(kdri_get_incline_target, get_incline_target, u16);
 kdri_get!(kdri_get_incline, get_incline, u16);
 kdri_get!(kdri_get_incline_min, get_incline_min, u16);
 kdri_get!(kdri_get_incline_max, get_incline_max, u16);
