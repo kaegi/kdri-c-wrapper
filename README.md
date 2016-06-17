@@ -39,7 +39,7 @@ int main(int argc, char const *argv[]) {
   // connect to device
   KdriDevice device = devices[0];
   printf("Connecting to %s\n", device.name);
-  KdriConnection* connection = kdri_connect(handle, &device);
+  KdriConnection* connection = kdri_connect(handle, &device.addr);
   printf("Connected...\n");
 
 
