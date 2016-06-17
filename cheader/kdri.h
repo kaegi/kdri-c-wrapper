@@ -11,12 +11,15 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+typedef struct {
+	uint8_t b[6];
+} KdriAddr;
 
 typedef void KdriHandle;
 typedef void KdriConnection;
 typedef struct {
 	uint8_t name[256];
-	uint8_t btaddr[6];
+	KdriAddr addr;
 } KdriDevice;
 
 typedef enum KdriReturn {
@@ -52,7 +55,7 @@ typedef enum {
 
 extern KdriHandle* kdri_create_handle(void);
 extern int32_t kdri_scan_devices(KdriHandle* handle, KdriDevice* dst_device_array, uint32_t max_array_length);
-extern KdriConnection* kdri_connect(KdriHandle* handle, KdriDevice* device);
+extern KdriConnection* kdri_connect(KdriHandle* handle, KdriAddr* device);
 extern int32_t kdri_connection_close(KdriConnection* connection);
 extern int32_t kdri_destroy_handle(KdriHandle* handle);
 

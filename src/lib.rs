@@ -147,9 +147,9 @@ pub extern fn kdri_scan_devices(_: *mut KdriHandle, dst_device_array: *mut KdriD
 }
 
 #[no_mangle]
-pub extern fn kdri_connect(handle: *mut KdriHandle, device: *const KdriDevice) -> *mut KdriConnection {
+pub extern fn kdri_connect(handle: *mut KdriHandle, addr: *const kdri::BtAddr) -> *mut KdriConnection {
     match panic::catch_unwind(|| {
-        let connection = unsafe{&*device}.to_kettler_device().connect().expect("connecting failed");
+        let connection = kdri::KettlerConnection::connect(unsafe{*addr}).expect("connecting failed");
         let kdri_connection = KdriConnection::new(handle, connection);
         unsafe { std::mem::transmute(Box::new(kdri_connection)) }
     }) {
