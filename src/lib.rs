@@ -28,6 +28,8 @@ macro_rules! kdri_kettler_enum_conversion {
     }
 }
 
+pub type KdriAddr = kdri::BtAddr;
+
 enum_from_primitive! {
 #[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub enum KdriDeviceType {
@@ -99,7 +101,7 @@ pub enum KdriReturn {
 #[repr(C)]
 pub struct KdriDevice {
     name: [c_uchar; 256],
-    addr: kdri::BtAddr,
+    addr: KdriAddr,
 }
 
 impl KdriDevice {
@@ -113,9 +115,9 @@ impl KdriDevice {
         new_dev
     }
 
-    fn to_kettler_device(&self) -> kdri::KettlerDevice {
-        kdri::KettlerDevice::new(unsafe{std::ffi::CStr::from_ptr(&self.name as *const u8 as *const i8)}.to_string_lossy().into_owned(), self.addr)
-    }
+    // fn to_kettler_device(&self) -> kdri::KettlerDevice {
+    //     kdri::KettlerDevice::new(unsafe{std::ffi::CStr::from_ptr(&self.name as *const u8 as *const i8)}.to_string_lossy().into_owned(), self.addr)
+    // }
 }
 
 #[no_mangle]
@@ -147,7 +149,7 @@ pub extern fn kdri_scan_devices(_: *mut KdriHandle, dst_device_array: *mut KdriD
 }
 
 #[no_mangle]
-pub extern fn kdri_connect(handle: *mut KdriHandle, addr: *const kdri::BtAddr) -> *mut KdriConnection {
+pub extern fn kdri_connect(handle: *mut KdriHandle, addr: *const KdriAddr) -> *mut KdriConnection {
     match panic::catch_unwind(|| {
         let connection = kdri::KettlerConnection::connect(unsafe{*addr}).expect("connecting failed");
         let kdri_connection = KdriConnection::new(handle, connection);
@@ -159,8 +161,8 @@ pub extern fn kdri_connect(handle: *mut KdriHandle, addr: *const kdri::BtAddr) -
 }
 
 #[no_mangle]
-pub extern fn kdri_device_addr_to_string(_: *mut KdriHandle, device: *const KdriDevice, name: *mut c_char) {
-    let name_string: String = unsafe{&*device}.to_kettler_device().get_addr().to_string();
+pub extern fn kdri_addr_to_str(_: *mut KdriHandle, addr: *const KdriAddr, name: *mut c_char) {
+    let name_string: String = unsafe{&*addr}.to_string();
     assert!(name_string.len() >= 17);
     let name_slice = unsafe { std::slice::from_raw_parts_mut(name as *mut u8, 17) };
     for i in 0..17 { name_slice[i] = name_string.as_bytes()[i]; }
