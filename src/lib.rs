@@ -73,20 +73,15 @@ kdri_kettler_enum_conversion!(KdriDeviceState, KettlerDeviceState);
 kdri_kettler_enum_conversion!(KdriBrakeMode, KettlerBrakeMode);
 kdri_kettler_enum_conversion!(KdriPowerRange, KettlerPowerRange);
 
-pub struct KdriHandle {
-}
-
 #[allow(dead_code)]
 pub struct KdriConnection {
     connection: kdri::KettlerConnection,
-    handle: *mut KdriHandle,
 }
 
 impl KdriConnection {
-    fn new(handle: *mut KdriHandle, connection: kdri::KettlerConnection) -> KdriConnection {
+    fn new(connection: kdri::KettlerConnection) -> KdriConnection {
         KdriConnection {
             connection: connection,
-            handle: handle,
         }
     }
 }
@@ -121,12 +116,7 @@ impl KdriDevice {
 }
 
 #[no_mangle]
-pub extern fn kdri_create_handle() -> *mut KdriHandle {
-    0 as *mut KdriHandle
-}
-
-#[no_mangle]
-pub extern fn kdri_scan_devices(_: *mut KdriHandle, dst_device_array: *mut KdriDevice, max_array_length: u32) -> i32 {
+pub extern fn kdri_scan_devices(dst_device_array: *mut KdriDevice, max_array_length: u32) -> i32 {
     match panic::catch_unwind(|| {
         match kdri::scan_devices() {
             Ok(devices) => {
@@ -149,10 +139,10 @@ pub extern fn kdri_scan_devices(_: *mut KdriHandle, dst_device_array: *mut KdriD
 }
 
 #[no_mangle]
-pub extern fn kdri_connect(handle: *mut KdriHandle, addr: *const KdriAddr) -> *mut KdriConnection {
+pub extern fn kdri_connect(addr: *const KdriAddr) -> *mut KdriConnection {
     match panic::catch_unwind(|| {
         let connection = kdri::KettlerConnection::connect(unsafe{*addr}).expect("connecting failed");
-        let kdri_connection = KdriConnection::new(handle, connection);
+        let kdri_connection = KdriConnection::new(connection);
         unsafe { std::mem::transmute(Box::new(kdri_connection)) }
     }) {
         Ok(r) => r,
@@ -161,7 +151,7 @@ pub extern fn kdri_connect(handle: *mut KdriHandle, addr: *const KdriAddr) -> *m
 }
 
 #[no_mangle]
-pub extern fn kdri_addr_to_str(_: *mut KdriHandle, addr: *const KdriAddr, name: *mut c_char) {
+pub extern fn kdri_addr_to_str(addr: *const KdriAddr, name: *mut c_char) {
     let name_string: String = unsafe{&*addr}.to_string();
     assert!(name_string.len() >= 17);
     let name_slice = unsafe { std::slice::from_raw_parts_mut(name as *mut u8, 17) };
@@ -176,11 +166,6 @@ pub extern fn kdri_connection_close(connection: *mut KdriConnection) -> i32 {
         Ok(()) => 0,
         Err(s) => { println!("{}", s); 1 },
     }
-}
-
-#[no_mangle]
-pub extern fn kdri_destroy_handle(_: *mut KdriHandle) -> i32 {
-    0
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

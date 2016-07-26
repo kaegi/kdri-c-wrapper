@@ -15,7 +15,6 @@ typedef struct {
 	uint8_t b[6];
 } KdriAddr;
 
-typedef void KdriHandle;
 typedef void KdriConnection;
 typedef struct {
 	uint8_t name[256];
@@ -53,11 +52,9 @@ typedef enum {
 } KdriPowerRange;
 
 
-extern KdriHandle* kdri_create_handle(void);
-extern int32_t kdri_scan_devices(KdriHandle* handle, KdriDevice* dst_device_array, uint32_t max_array_length);
-extern KdriConnection* kdri_connect(KdriHandle* handle, KdriAddr* device);
+extern int32_t kdri_scan_devices(KdriDevice* dst_device_array, uint32_t max_array_length);
+extern KdriConnection* kdri_connect(KdriAddr* device);
 extern int32_t kdri_connection_close(KdriConnection* connection);
-extern int32_t kdri_destroy_handle(KdriHandle* handle);
 
 /*
 	17 bytes will be written to "name" in the form of "XX:XX:XX:XX:XX:XX". The string will NOT be null
